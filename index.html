@@ -18,6 +18,7 @@
             color: #ffffff;
             overflow-x: hidden;
             font-family: 'Inter', sans-serif;
+            line-height: 1.7;
         }
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #0a0a0a; }
@@ -35,7 +36,7 @@
         .glass-card:hover {
             border-color: rgba(59, 130, 246, 0.3);
             transform: translateY(-5px);
-            box-shadow: 0 8px 40px rgba(59, 130, 246, 0.2);
+            box-shadow: 0 12px 40px rgba(59, 130, 246, 0.15);
         }
 
         .text-gradient-accent {
@@ -61,11 +62,11 @@
         }
 
         /* --- UTILITIES --- */
-        .section-min-height {
+        .section-padded {
             min-height: 90vh; display: flex; flex-direction: column;
-            justify-content: center; padding: 80px 24px;
+            justify-content: center; padding: 100px 24px;
         }
-        .container { max-width: 1152px; margin: 0 auto; }
+        .container { max-width: 1280px; margin: 0 auto; } /* Wider container for better margins */
         
         .bg-fixed { position: fixed; inset: 0; z-index: -10; }
         .blob { position: absolute; width: 40%; height: 40%; border-radius: 50%; filter: blur(120px); }
@@ -74,21 +75,25 @@
 
         /* --- RUBRIC SPECIFIC STYLES --- */
         .dataset-bar {
-            height: 24px; border-radius: 12px; position: relative; overflow: hidden;
-            display: flex; margin-top: 10px;
+            height: 32px; border-radius: 8px; position: relative; overflow: hidden;
+            display: flex; margin-top: 16px; background: #1e293b;
         }
-        .bar-segment { height: 100%; transition: width 1s ease-out; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; }
-        .bar-custom { background: #3b82f6; width: 83%; }
-        .bar-asap { background: #8b5cf6; width: 17%; }
+        .bar-segment { 
+            height: 100%; transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1); 
+            display: flex; align-items: center; justify-content: center; 
+            font-size: 12px; font-weight: bold; letter-spacing: 0.5px;
+        }
+        .bar-custom { background: #3b82f6; width: 0%; } 
+        .bar-asap { background: #8b5cf6; width: 0%; }
         
-        .split-bar-container { display: flex; gap: 4px; height: 8px; width: 100%; border-radius: 4px; overflow: hidden; margin-top: 8px; }
+        .split-bar-container { display: flex; gap: 4px; height: 8px; width: 100%; border-radius: 4px; overflow: hidden; margin-top: 12px; }
         .split-train { background: #10b981; width: 80%; }
         .split-val { background: #f59e0b; width: 10%; }
         .split-test { background: #ef4444; width: 10%; }
 
         .qual-card {
-            border-left: 4px solid; padding: 20px; border-radius: 8px;
-            background: rgba(255,255,255,0.03); margin-bottom: 20px;
+            border-left: 4px solid; padding: 24px; border-radius: 12px;
+            background: rgba(255,255,255,0.03); margin-bottom: 24px;
         }
         .qual-success { border-color: #10b981; }
         .qual-partial { border-color: #f59e0b; }
@@ -96,13 +101,16 @@
 
         .neuro-bg {
             background-image: url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2070&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            opacity: 0.1;
-            mix-blend-mode: overlay;
-            z-index: -1;
+            background-size: cover; background-position: center;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0.08; mix-blend-mode: overlay; z-index: -1;
+        }
+
+        /* Custom Arrow Animation */
+        .arrow-bounce { animation: bounceRight 2s infinite; }
+        @keyframes bounceRight {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(5px); }
         }
 
     </style>
@@ -125,8 +133,8 @@
         <div class="text-xs font-mono text-slate-500 border border-white/10 px-3 py-1 rounded-full">FINAL DEFENSE</div>
     </nav>
 
-    <!-- 1. PROBLEM STATEMENT & INPUTS/OUTPUTS -->
-    <section class="section-min-height relative">
+    <!-- 1. HERO: INTRO + INPUT/OUTPUT DEFINITION -->
+    <section class="section-padded relative">
         <div class="neuro-bg"></div> 
         <div class="container text-center relative z-10">
             <div class="inline-flex items-center gap-2 px-4 py-1 rounded-full border border-green-500/30 bg-green-500/10 text-green-400 text-sm font-mono mb-8">
@@ -134,116 +142,153 @@
                 Deployed & Verified
             </div>
             
-            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6">
+            <h1 class="text-5xl md:text-8xl font-extrabold tracking-tight mb-8">
                 Decoupling Spelling <br>
                 <span class="text-gradient-accent">From Knowledge.</span>
             </h1>
             
-            <p class="text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed mb-12">
+            <p class="text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed mb-20 font-light">
                 An NLP pipeline engineered to grade student essays fairly by isolating neurodiverse noise from conceptual understanding.
             </p>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto text-left">
-                <div class="glass-card p-6 rounded-xl border-t-2 border-blue-500">
-                    <h3 class="text-sm font-mono text-blue-400 mb-2">INPUT (M0)</h3>
-                    <p class="text-sm text-slate-300">Raw student text containing <strong>visual/phonetic errors</strong> (e.g., b/d swaps) + Reference Answer.</p>
+            <!-- INPUT / OUTPUT DEFINITION (RESTORED & PROMINENT) -->
+            <div class="grid grid-cols-1 md:grid-cols-7 gap-6 max-w-6xl mx-auto text-left items-center">
+                <!-- Input Card -->
+                <div class="md:col-span-3 glass-card p-8 rounded-2xl border-t-2 border-blue-500 hover:-translate-y-2 transition-transform">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="p-2 bg-blue-500/20 rounded-lg text-blue-400"><i class="fa-solid fa-keyboard"></i></div>
+                        <h3 class="text-sm font-mono text-blue-400 font-bold">INPUT (M0)</h3>
+                    </div>
+                    <p class="text-slate-300 leading-relaxed">Raw student text containing <strong>phonetic & visual errors</strong> (e.g., b/d swaps). Can be OCR-derived from handwriting or typed directly.</p>
                 </div>
-                <div class="flex items-center justify-center text-slate-600 text-2xl">
-                    <i class="fa-solid fa-arrow-right"></i>
+
+                <!-- Arrow -->
+                <div class="md:col-span-1 flex justify-center text-slate-600 text-3xl arrow-bounce">
+                    <i class="fa-solid fa-arrow-right-long"></i>
                 </div>
-                <div class="glass-card p-6 rounded-xl border-t-2 border-purple-500">
-                    <h3 class="text-sm font-mono text-purple-400 mb-2">OUTPUT (M2)</h3>
-                    <p class="text-sm text-slate-300"><strong>Fair Score (0-5)</strong> based on semantic meaning + <strong>Transparency Log</strong> of corrections.</p>
+
+                <!-- Output Card -->
+                <div class="md:col-span-3 glass-card p-8 rounded-2xl border-t-2 border-purple-500 hover:-translate-y-2 transition-transform">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="p-2 bg-purple-500/20 rounded-lg text-purple-400"><i class="fa-solid fa-square-check"></i></div>
+                        <h3 class="text-sm font-mono text-purple-400 font-bold">OUTPUT (M2)</h3>
+                    </div>
+                    <p class="text-slate-300 leading-relaxed"><strong>Fair Score (0-5)</strong> based strictly on semantic meaning + a <strong>Transparency Log</strong> detailing every correction applied.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 2. PROBLEM & MOTIVATION -->
-    <section class="section-min-height bg-white/5">
+    <!-- 2. PROBLEM STATEMENT & COMPARISON -->
+    <section class="section-padded bg-white/[0.02]">
         <div class="container">
-            <h2 class="text-3xl font-bold mb-12 border-l-4 border-red-500 pl-4">1. Problem Statement</h2>
+            <div class="flex items-center gap-4 mb-16">
+                <div class="h-12 w-1 bg-red-500 rounded-full"></div>
+                <h2 class="text-4xl font-bold">1. Problem Statement</h2>
+            </div>
             
-            <div class="problem-grid grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
                 <div>
-                    <p class="text-lg text-slate-400 mb-6">
-                        Traditional automated graders create a <strong class="text-white font-bold">double penalty</strong> for dyslexic students:
+                    <p class="text-xl text-slate-300 mb-8 leading-relaxed">
+                        The educational assessment landscape currently <strong class="text-white font-bold">penalizes neurodiverse students</strong> for surface-level errors rather than evaluating their actual understanding.
                     </p>
-                    <ul class="space-y-4">
-                        <li class="flex gap-4 items-start">
-                            <div class="w-8 h-8 rounded bg-red-500/10 text-red-500 flex items-center justify-center shrink-0 mt-1"><i class="fa-solid fa-xmark"></i></div>
+                    <p class="text-lg text-slate-400 mb-10 leading-relaxed">
+                        Traditional automated graders rely on rigid keyword matching, creating a <strong class="text-white font-bold">double penalty</strong> for dyslexic students:
+                    </p>
+                    <ul class="space-y-6">
+                        <li class="flex gap-6 items-start p-4 rounded-xl hover:bg-white/5 transition-colors">
+                            <div class="w-10 h-10 rounded-lg bg-red-500/10 text-red-500 flex items-center justify-center shrink-0 mt-1 text-lg"><i class="fa-solid fa-xmark"></i></div>
                             <div>
-                                <strong class="text-white block">Spelling Penalty</strong>
-                                <span class="text-sm text-slate-500">Misspelled keywords flagged as incorrect despite correct concepts.</span>
+                                <strong class="text-white text-lg block mb-1">Spelling Penalty</strong>
+                                <span class="text-slate-400">Misspelled keywords flagged as incorrect despite correct concepts.</span>
                             </div>
                         </li>
-                        <li class="flex gap-4 items-start">
-                            <div class="w-8 h-8 rounded bg-red-500/10 text-red-500 flex items-center justify-center shrink-0 mt-1"><i class="fa-solid fa-xmark"></i></div>
+                        <li class="flex gap-6 items-start p-4 rounded-xl hover:bg-white/5 transition-colors">
+                            <div class="w-10 h-10 rounded-lg bg-red-500/10 text-red-500 flex items-center justify-center shrink-0 mt-1 text-lg"><i class="fa-solid fa-xmark"></i></div>
                             <div>
-                                <strong class="text-white block">Semantic Failure</strong>
-                                <span class="text-sm text-slate-500">Standard BERT models fail to tokenize "noisy" text, losing context.</span>
+                                <strong class="text-white text-lg block mb-1">Semantic Failure</strong>
+                                <span class="text-slate-400">Standard BERT models fail to tokenize "noisy" text, losing context entirely.</span>
                             </div>
                         </li>
                     </ul>
                 </div>
                 
-                <div>
-                    <div class="glass-card p-6 rounded-xl border-l-4 border-green-500 transform scale-105 shadow-2xl">
-                        <div class="text-xs text-slate-500 font-mono mb-2">OUR SOLUTION</div>
-                        <p class="font-mono text-sm mb-2">Input: "The <span class="text-red-400">dottom</span> line..."</p>
-                        <p class="font-mono text-sm text-green-400">Score: 5/5 (Meaning Verified)</p>
+                <div class="space-y-8">
+                    <!-- Standard Grader (Fail) -->
+                    <div class="glass-card p-8 rounded-2xl border-l-4 border-red-500 opacity-70 hover:opacity-100 transition-opacity">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-xs text-slate-500 font-mono tracking-widest">STANDARD GRADER</span>
+                            <span class="text-xs bg-red-500/20 text-red-400 px-3 py-1 rounded font-bold">FAIL</span>
+                        </div>
+                        <p class="font-mono text-lg mb-4">Input: "The <span class="text-red-400 underline decoration-wavy decoration-2">dottom</span> line..."</p>
+                        <p class="font-mono text-lg text-red-400 font-bold">Score: 0/5 (Error)</p>
+                    </div>
+
+                    <div class="text-center text-slate-700 text-2xl"><i class="fa-solid fa-arrow-down"></i></div>
+
+                    <!-- Our Solution (Success) -->
+                    <div class="glass-card p-8 rounded-2xl border-l-4 border-green-500 transform scale-105 shadow-2xl shadow-green-900/20">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-xs text-slate-500 font-mono tracking-widest">OUR SOLUTION (M1+M2)</span>
+                            <span class="text-xs bg-green-500/20 text-green-400 px-3 py-1 rounded font-bold">SUCCESS</span>
+                        </div>
+                        <p class="font-mono text-lg mb-4">Input: "The dottom line..."</p>
+                        <p class="font-mono text-lg text-green-400 font-bold">Score: 5/5 (Meaning Verified)</p>
+                        <p class="text-xs text-slate-500 mt-2 font-mono">Corrected: "bottom" via Damerau-Levenshtein</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 3. DATASET ANALYSIS (UPDATED NARRATIVE) -->
-    <section class="section-min-height">
+    <!-- 3. DATASET ANALYSIS -->
+    <section class="section-padded">
         <div class="container">
-            <h2 class="text-3xl font-bold mb-12 border-l-4 border-blue-500 pl-4">2. Dataset & Data Engineering</h2>
+            <div class="flex items-center gap-4 mb-16">
+                <div class="h-12 w-1 bg-blue-500 rounded-full"></div>
+                <h2 class="text-4xl font-bold">2. Dataset Analysis</h2>
+            </div>
             
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
                 <div>
-                    <h3 class="text-xl font-bold text-white mb-4">Strategic Data Scaling</h3>
-                    <p class="text-sm text-slate-400 mb-6 leading-relaxed">
-                        <strong>Phase 1 (M0 Experiment):</strong> Initially, we collected <strong>100 real-world handwritten samples</strong> to train a custom OCR model. Due to data scarcity, accuracy was low (<60%).
-                        <br><br>
-                        <strong class="text-blue-400">Strategic Pivot:</strong> Instead of discarding this data, we analyzed the error patterns (transpositions, phonetic swaps) within it to engineer a robust <strong>Data Generator</strong>. This allowed us to synthesize a massive, high-quality training corpus.
+                    <p class="text-lg text-slate-400 mb-8 leading-relaxed">
+                        We constructed a <strong>Composite Dataset (N=1200+)</strong> merging two distinct sources to ensure robustness. This dual-source strategy prevents overfitting to simple sentences.
                     </p>
                     
-                    <div class="mb-8">
-                        <div class="flex justify-between text-xs font-mono mb-2 text-slate-400">
-                            <span>COMPOSITE DATASET (N=1200+)</span>
+                    <!-- ANIMATED DATASET BAR -->
+                    <div class="mb-12 p-6 bg-white/5 rounded-2xl border border-white/5">
+                        <div class="flex justify-between text-xs font-mono mb-3 text-slate-400 tracking-wider">
+                            <span>DATASET COMPOSITION</span>
+                            <span>TOTAL: ~1210 SAMPLES</span>
                         </div>
-                        <div class="dataset-bar bg-slate-800">
-                            <div class="bar-segment bar-custom" style="width: 83%">Synthesized Dyslexic Set (1000+)</div>
-                            <div class="bar-segment bar-asap" style="width: 17%">ASAP-SAS (200)</div>
+                        <div class="dataset-bar">
+                            <div class="bar-segment bar-custom">Custom (83%)</div>
+                            <div class="bar-segment bar-asap">ASAP (17%)</div>
                         </div>
                     </div>
 
-                    <ul class="space-y-4">
-                        <li class="flex gap-4">
-                            <div class="w-3 h-3 mt-2 rounded-full bg-blue-500 shrink-0"></div>
+                    <ul class="space-y-8">
+                        <li class="flex gap-6">
+                            <div class="w-4 h-4 mt-2 rounded-full bg-blue-500 shrink-0 shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
                             <div>
-                                <strong class="text-white block mb-1">Synthesized Set (N=1000+)</strong>
-                                <p class="text-sm text-slate-500">Generated using error patterns derived from real dyslexic samples. Teaches <em>accommodation</em>.</p>
+                                <strong class="text-white text-lg block mb-2">Synthesized Dyslexic Set (N=1000+)</strong>
+                                <p class="text-slate-400 leading-relaxed">High-quality answers infused with intentional errors (transpositions, phonetic swaps). Teaches the model <em>accommodation</em>.</p>
                             </div>
                         </li>
-                        <li class="flex gap-4">
-                            <div class="w-3 h-3 mt-2 rounded-full bg-purple-500 shrink-0"></div>
+                        <li class="flex gap-6">
+                            <div class="w-4 h-4 mt-2 rounded-full bg-purple-500 shrink-0 shadow-[0_0_15px_rgba(168,85,247,0.5)]"></div>
                             <div>
-                                <strong class="text-white block mb-1">ASAP-SAS Subset (N=200)</strong>
-                                <p class="text-sm text-slate-500">Complex academic sentences. Teaches <em>generalization</em>.</p>
+                                <strong class="text-white text-lg block mb-2">ASAP-SAS Subset (N=200)</strong>
+                                <p class="text-slate-400 leading-relaxed">Complex academic sentences from the official Automated Student Assessment Prize corpus. Teaches <em>domain generalization</em>.</p>
                             </div>
                         </li>
                     </ul>
                 </div>
                 
-                <div class="glass-card p-8 rounded-2xl">
-                    <h3 class="font-mono text-sm text-slate-500 mb-6">TRAINING CONFIGURATION</h3>
-                    <div class="mb-8">
-                        <div class="flex justify-between text-xs mb-2">
+                <div class="glass-card p-10 rounded-2xl border border-white/10">
+                    <h3 class="font-mono text-sm text-slate-500 mb-8 tracking-widest">TRAINING CONFIGURATION</h3>
+                    <div class="mb-10">
+                        <div class="flex justify-between text-xs mb-3 font-mono">
                             <span class="text-green-400">Train (80%)</span>
                             <span class="text-amber-400">Val (10%)</span>
                             <span class="text-red-400">Test (10%)</span>
@@ -253,90 +298,153 @@
                             <div class="split-val"></div>
                             <div class="split-test"></div>
                         </div>
-                        <p class="text-xs text-slate-600 mt-2">Strict Split to prevent Data Leakage.</p>
+                        <p class="text-sm text-slate-500 mt-4 leading-relaxed">
+                            <strong>Strict Split:</strong> We hid 20% of the data during training to prevent data leakage and ensure the QWK score reflects true generalization.
+                        </p>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 pt-8 border-t border-white/5">
+                        <div>
+                            <div class="text-3xl font-bold text-white mb-1">42</div>
+                            <div class="text-xs text-slate-500 font-mono">RANDOM SEED</div>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-bold text-white mb-1">128</div>
+                            <div class="text-xs text-slate-500 font-mono">MAX LENGTH</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 4. METHODOLOGY -->
-    <section class="section-min-height bg-white/5">
+    <!-- 4. METHODOLOGY (Expanded Detail) -->
+    <section class="section-padded bg-white/[0.02]">
         <div class="container">
-            <h2 class="text-3xl font-bold mb-12 border-l-4 border-purple-500 pl-4">3. Methodology (M1 → M2)</h2>
+            <div class="flex items-center gap-4 mb-16">
+                <div class="h-12 w-1 bg-purple-500 rounded-full"></div>
+                <h2 class="text-4xl font-bold">3. Methodology (M1 → M2)</h2>
+            </div>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="glass-card p-8 rounded-2xl border-t-4 border-slate-500">
-                    <div class="text-3xl mb-4"><i class="fa-solid fa-keyboard text-slate-400"></i></div>
-                    <h3 class="text-xl font-bold mb-2">M0: Acquisition</h3>
-                    <p class="text-sm text-slate-400 mb-4">Robust entry handling. Upgraded from custom OCR to <strong>Google Cloud Vision API</strong> integration / Simulation for stability.</p>
+                <!-- M0 -->
+                <div class="glass-card p-10 rounded-2xl border-t-4 border-slate-500 flex flex-col h-full">
+                    <div class="text-4xl mb-6 text-slate-500"><i class="fa-solid fa-keyboard"></i></div>
+                    <h3 class="text-xl font-bold mb-4 text-white">M0: Acquisition</h3>
+                    <p class="text-slate-400 mb-6 flex-grow leading-relaxed">
+                        Robust entry point handling raw student submissions. We implemented a dual-mode system:
+                    </p>
+                    <ul class="text-sm text-slate-500 space-y-3 font-mono">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-slate-400"></i> Google Vision API Ready</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-slate-400"></i> Direct Typed Input</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-slate-400"></i> Stable Simulation Mode</li>
+                    </ul>
                 </div>
 
-                <div class="glass-card p-8 rounded-2xl border-t-4 border-blue-500">
-                    <div class="text-3xl mb-4"><i class="fa-solid fa-wand-magic-sparkles text-blue-500"></i></div>
-                    <h3 class="text-xl font-bold mb-2">M1: Normalizer</h3>
-                    <p class="text-sm text-slate-400 mb-4"><strong>Damerau-Levenshtein Distance</strong>. Specifically targets <em>transpositions</em> (e.g., 'teh' → 'the'), a key dyslexic marker.</p>
+                <!-- M1 -->
+                <div class="glass-card p-10 rounded-2xl border-t-4 border-blue-500 flex flex-col h-full">
+                    <div class="text-4xl mb-6 text-blue-500"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                    <h3 class="text-xl font-bold mb-4 text-white">M1: Normalizer</h3>
+                    <p class="text-slate-400 mb-6 flex-grow leading-relaxed">
+                        We utilize <strong>Damerau-Levenshtein Distance</strong> instead of standard edit distance. This algorithm mathematically accounts for <strong>adjacent transpositions</strong> (e.g., 'teh' → 'the'), the signature error of dyslexia.
+                    </p>
+                    <div class="bg-black/40 p-4 rounded-lg border border-blue-500/20">
+                        <div class="text-xs text-blue-300 font-mono mb-1">CONFIG</div>
+                        <div class="text-sm text-white font-mono">Threshold ≤ 2<br>Guardrails: Enabled</div>
+                    </div>
                 </div>
 
-                <div class="glass-card p-8 rounded-2xl border-t-4 border-purple-500">
-                    <div class="text-3xl mb-4"><i class="fa-solid fa-brain text-purple-500"></i></div>
-                    <h3 class="text-xl font-bold mb-2">M2: Semantic Grader</h3>
-                    <p class="text-sm text-slate-400 mb-4"><strong>Fine-Tuned DistilBERT</strong>. Trained for 40 Epochs to learn Semantic Textual Similarity (STS).</p>
+                <!-- M2 -->
+                <div class="glass-card p-10 rounded-2xl border-t-4 border-purple-500 flex flex-col h-full">
+                    <div class="text-4xl mb-6 text-purple-500"><i class="fa-solid fa-brain"></i></div>
+                    <h3 class="text-xl font-bold mb-4 text-white">M2: Semantic Grader</h3>
+                    <p class="text-slate-400 mb-6 flex-grow leading-relaxed">
+                        A <strong>Fine-Tuned DistilBERT</strong> model trained for Sequence Classification. It evaluates <strong>Semantic Textual Similarity (STS)</strong> by processing the Reference and Cleaned Answer as a single pair.
+                    </p>
+                    <div class="bg-black/40 p-4 rounded-lg border border-purple-500/20">
+                        <div class="text-xs text-purple-300 font-mono mb-1">INPUT FORMAT</div>
+                        <div class="text-sm text-white font-mono">[CLS] Ref [SEP] Ans</div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 5. RESULTS & COMPARISON -->
-    <section class="section-min-height">
+    <!-- 5. RESULTS & ABLATION -->
+    <section class="section-padded">
         <div class="container">
-            <h2 class="text-3xl font-bold mb-12 border-l-4 border-green-500 pl-4">4. Results & Comparison</h2>
+            <div class="flex items-center gap-4 mb-16">
+                <div class="h-12 w-1 bg-green-500 rounded-full"></div>
+                <h2 class="text-4xl font-bold">4. Quantitative Results</h2>
+            </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
+                
+                <!-- Comparison -->
                 <div>
-                    <h3 class="text-xl font-bold mb-6">Comparison with State-of-the-Art</h3>
-                    <p class="text-slate-400 mb-8">
+                    <h3 class="text-2xl font-bold mb-8">Comparison with State-of-the-Art</h3>
+                    <p class="text-slate-400 mb-10">
                         We benchmarked our pipeline against standard approaches on our Held-Out Test Set.
                     </p>
                     
-                    <div class="space-y-6">
+                    <div class="space-y-8">
                         <div>
-                            <div class="flex justify-between text-sm mb-2">
-                                <span>Standard Keyword Matcher</span>
+                            <div class="flex justify-between text-sm mb-2 font-mono">
+                                <span class="text-slate-400">Standard Keyword Matcher</span>
                                 <span class="text-red-400">QWK: ~0.40</span>
                             </div>
-                            <div class="h-4 bg-slate-800 rounded overflow-hidden"><div class="h-full bg-red-500/30" style="width: 40%"></div></div>
-                            <p class="text-xs text-slate-600 mt-1">Fails completely on spelling errors.</p>
+                            <div class="h-4 bg-slate-800 rounded-full overflow-hidden"><div class="h-full bg-red-500/30" style="width: 40%"></div></div>
+                            <p class="text-xs text-slate-600 mt-2 pl-1">Fails completely on spelling errors.</p>
                         </div>
                         <div>
-                            <div class="flex justify-between text-sm mb-2">
-                                <span>Vanilla BERT (No Fine-Tuning)</span>
+                            <div class="flex justify-between text-sm mb-2 font-mono">
+                                <span class="text-slate-400">Vanilla BERT (No Fine-Tuning)</span>
                                 <span class="text-amber-400">QWK: ~0.65</span>
                             </div>
-                            <div class="h-4 bg-slate-800 rounded overflow-hidden"><div class="h-full bg-amber-500/50" style="width: 65%"></div></div>
-                            <p class="text-xs text-slate-600 mt-1">Understands context but penalizes noise.</p>
+                            <div class="h-4 bg-slate-800 rounded-full overflow-hidden"><div class="h-full bg-amber-500/50" style="width: 65%"></div></div>
+                            <p class="text-xs text-slate-600 mt-2 pl-1">Understands context but penalizes noise.</p>
                         </div>
                         <div>
-                            <div class="flex justify-between text-sm mb-2">
+                            <div class="flex justify-between text-sm mb-2 font-mono">
                                 <span class="text-green-400 font-bold">Ours (M1 + Fine-Tuned M2)</span>
                                 <span class="text-green-400 font-bold">QWK: ~0.96</span>
                             </div>
-                            <div class="h-4 bg-slate-800 rounded overflow-hidden"><div class="h-full bg-green-500" style="width: 96%"></div></div>
-                            <p class="text-xs text-slate-600 mt-1">Near-human agreement.</p>
+                            <div class="h-4 bg-slate-800 rounded-full overflow-hidden"><div class="h-full bg-green-500" style="width: 96%"></div></div>
+                            <p class="text-xs text-slate-600 mt-2 pl-1">Near-human agreement on test set.</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="glass-card p-12 rounded-2xl text-center border border-green-500/20">
-                    <h4 class="text-sm font-mono text-slate-500 mb-4">ABLATION STUDY</h4>
-                    <p class="text-slate-300 mb-6">Impact of M1 Normalization Layer</p>
-                    <div class="flex justify-center gap-8 items-end h-32">
-                        <div class="w-20 bg-slate-700 rounded-t relative h-[78%] flex items-end justify-center"><span class="mb-2 text-xs">0.78</span></div>
-                        <div class="w-20 bg-green-500 rounded-t relative h-[96%] flex items-end justify-center"><span class="mb-2 text-xs text-black font-bold">0.96</span></div>
+                <!-- Ablation Study -->
+                <div class="glass-card p-10 rounded-2xl border border-white/5">
+                    <h3 class="text-xl font-bold text-white mb-6">Ablation Study: Does M1 Matter?</h3>
+                    <p class="text-slate-400 mb-10">
+                        We isolated the impact of the Normalization layer (M1). The results confirm M1 is critical for fairness.
+                    </p>
+                    
+                    <div class="space-y-8">
+                        <div>
+                            <div class="flex justify-between text-sm mb-2 text-slate-400 font-mono">
+                                <span>M2 Alone (Baseline)</span>
+                                <span class="text-red-400">0.78</span>
+                            </div>
+                            <div class="h-3 bg-slate-800 rounded-full overflow-hidden">
+                                <div class="h-full bg-red-500/50" style="width: 78%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-2 text-white font-bold font-mono">
+                                <span>M1 + M2 (Full Pipeline)</span>
+                                <span class="text-green-400">0.96</span>
+                            </div>
+                            <div class="h-3 bg-slate-800 rounded-full overflow-hidden">
+                                <div class="h-full bg-green-500 shadow-[0_0_20px_rgba(34,197,94,0.5)]" style="width: 96%"></div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="flex justify-center gap-8 text-xs font-mono mt-2 text-slate-500">
-                        <span class="w-20">M2 Only</span>
-                        <span class="w-20">M1 + M2</span>
+                    <div class="mt-12 text-center p-6 bg-green-500/5 rounded-xl border border-green-500/10">
+                        <span class="text-6xl font-bold text-green-400 tracking-tighter">0.96</span>
+                        <div class="text-xs font-mono text-slate-500 mt-2 uppercase tracking-widest">Quadratic Weighted Kappa</div>
                     </div>
                 </div>
             </div>
@@ -344,65 +452,100 @@
     </section>
 
     <!-- 6. QUALITATIVE ANALYSIS -->
-    <section class="section-min-height bg-white/5">
+    <section class="section-padded bg-white/[0.02]">
         <div class="container">
-            <h2 class="text-3xl font-bold mb-12 border-l-4 border-yellow-500 pl-4">5. Qualitative Analysis</h2>
+            <div class="flex items-center gap-4 mb-16">
+                <div class="h-12 w-1 bg-yellow-500 rounded-full"></div>
+                <h2 class="text-4xl font-bold">5. Qualitative Analysis</h2>
+            </div>
             
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                <div class="space-y-6">
-                    <div class="qual-card qual-success">
-                        <div class="flex justify-between items-center mb-2">
-                            <h4 class="font-bold text-green-400">✅ Success Case</h4>
-                            <span class="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded font-mono">Score: 5/5</span>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                
+                <div class="space-y-8">
+                    <!-- Success -->
+                    <div class="qual-card qual-success hover:bg-white/5 transition-colors">
+                        <div class="flex justify-between items-center mb-3">
+                            <h4 class="font-bold text-green-400 text-lg">✅ Case 1: Dyslexic Correction (Success)</h4>
+                            <span class="text-xs bg-green-500/20 text-green-400 px-3 py-1 rounded font-mono">5/5</span>
                         </div>
-                        <div class="text-sm font-mono text-slate-300">
-                            Input: "The <span class="text-red-400">dottom</span> line is that <span class="text-red-400">byslexia</span> does exist."<br>
-                            <span class="text-slate-500 mt-2 block">Analysis: M1 fixes "byslexia" (b/d swap). M2 matches concept.</span>
-                        </div>
-                    </div>
-
-                    <div class="qual-card qual-success">
-                        <div class="flex justify-between items-center mb-2">
-                            <h4 class="font-bold text-blue-400">🛡️ Guardrail Success</h4>
-                            <span class="text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded font-mono">Score: 0/5</span>
-                        </div>
-                        <div class="text-sm font-mono text-slate-300">
-                            Input: "I <span class="text-blue-400">dont</span> have dyslexia." (Ref: "I have...")<br>
-                            <span class="text-slate-500 mt-2 block">Analysis: Contradiction Guardrail (SBERT) forces fail despite keyword overlap.</span>
+                        <div class="text-slate-300 leading-relaxed">
+                            <span class="font-mono text-sm text-slate-500 block mb-2">INPUT</span>
+                            "The <span class="text-red-400">dottom</span> line is that <span class="text-red-400">byslexia</span> exists."
+                            <div class="mt-4 pt-4 border-t border-white/10 text-sm text-slate-400">
+                                <strong>Analysis:</strong> M1 correctly identifies B/D swaps via Damerau-Levenshtein. M2 receives clean text and awards full marks.
+                            </div>
                         </div>
                     </div>
 
-                    <div class="qual-card qual-partial">
-                        <div class="flex justify-between items-center mb-2">
-                            <h4 class="font-bold text-yellow-500">⚠️ Limitation Case</h4>
-                            <span class="text-xs bg-yellow-500/20 text-yellow-500 px-2 py-1 rounded font-mono">Score: 3/5</span>
+                    <!-- Contradiction -->
+                    <div class="qual-card qual-success hover:bg-white/5 transition-colors">
+                        <div class="flex justify-between items-center mb-3">
+                            <h4 class="font-bold text-blue-400 text-lg">🛡️ Case 2: Contradiction (Guardrail)</h4>
+                            <span class="text-xs bg-blue-500/20 text-blue-400 px-3 py-1 rounded font-mono">0/5</span>
                         </div>
-                        <div class="text-sm font-mono text-slate-300">
-                            Input: "My friend <span class="text-yellow-500">Ana</span> is helpful." (Ref: "Ants are...")<br>
-                            <span class="text-slate-500 mt-2 block">Analysis: "Ana" is a valid name. M1 safety prevents over-correction to "Ants".</span>
+                        <div class="text-slate-300 leading-relaxed">
+                            <span class="font-mono text-sm text-slate-500 block mb-2">INPUT vs REFERENCE</span>
+                            Ref: "I have dyslexia." <br>
+                            In: "I <span class="text-blue-400 font-bold">dont</span> have dyslexia."
+                            <div class="mt-4 pt-4 border-t border-white/10 text-sm text-slate-400">
+                                <strong>Analysis:</strong> Contradiction Guardrail (SBERT) detects opposite meaning despite high keyword overlap.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Limitation -->
+                    <div class="qual-card qual-partial hover:bg-white/5 transition-colors">
+                        <div class="flex justify-between items-center mb-3">
+                            <h4 class="font-bold text-yellow-500 text-lg">⚠️ Case 3: Proper Noun (Limitation)</h4>
+                            <span class="text-xs bg-yellow-500/20 text-yellow-500 px-3 py-1 rounded font-mono">3/5</span>
+                        </div>
+                        <div class="text-slate-300 leading-relaxed">
+                            <span class="font-mono text-sm text-slate-500 block mb-2">INPUT</span>
+                            "My friend <span class="text-yellow-500">Ana</span> is helpful." (Ref: "Ants")
+                            <div class="mt-4 pt-4 border-t border-white/10 text-sm text-slate-400">
+                                <strong>Analysis:</strong> "Ana" is a valid name. M1 safeguards skip correction to prevent over-fitting/hallucination.
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-black h-fit">
-                    <div class="absolute top-4 left-4 bg-red-600 text-white text-xs px-2 py-1 rounded animate-pulse z-10 font-bold">LIVE DEMO</div>
+                <!-- Demo Video Container -->
+                <div class="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-black h-fit self-start">
+                    <div class="absolute top-6 left-6 bg-red-600 text-white text-xs px-3 py-1.5 rounded font-bold animate-pulse z-10 tracking-wider">LIVE DEMO</div>
                     <video class="w-full aspect-video object-cover" controls>
                         <source src="demo.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
                     </video>
+                    <div class="p-6 bg-zinc-900/50 backdrop-blur">
+                        <p class="text-sm text-slate-400 text-center">Demonstrating real-time M1 correction and M2 scoring.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- FOOTER -->
-    <footer class="py-10 text-center text-slate-600 text-sm border-t border-white/5 mt-20">
-        <p class="font-mono mb-2">PROJECT ID: DYSLEXIA-GRADER-FINAL</p>
-        <p>Built with Python, Transformers, and Gradio.</p>
+    <footer class="py-16 text-center text-slate-600 text-sm border-t border-white/5 mt-20 font-mono">
+        PROJECT ID: DYSLEXIA-GRADER-FINAL <br>
+        <span class="text-xs opacity-50 mt-2 block">Built with Transformers, Gradio, & Tailwind</span>
     </footer>
 
     <script>
+        // Register GSAP
         gsap.registerPlugin(ScrollTrigger);
-        // Particle Generation
+        
+        // ANIMATE DATASET BARS (83% and 17%)
+        gsap.to('.bar-custom', { width: '83%', duration: 1.5, ease: "power2.out", scrollTrigger: '.dataset-bar' });
+        gsap.to('.bar-asap', { width: '17%', duration: 1.5, ease: "power2.out", scrollTrigger: '.dataset-bar' });
+
+        // Card Fade In
+        gsap.utils.toArray('.glass-card').forEach((card, i) => {
+            gsap.from(card, {
+                scrollTrigger: { trigger: card, start: "top 90%" },
+                y: 50, opacity: 0, duration: 0.6, delay: i * 0.1
+            });
+        });
+        
+        // Particle Background
         const particlesContainer = document.getElementById('particles');
         for (let i = 0; i < 50; i++) {
             const p = document.createElement('div');
@@ -413,21 +556,6 @@
             p.style.opacity = Math.random() * 0.5;
             particlesContainer.appendChild(p);
         }
-        // Animations
-        gsap.utils.toArray('section h2').forEach(title => {
-            gsap.from(title, {
-                scrollTrigger: { trigger: title, start: "top 85%", toggleActions: "play none none reverse" },
-                y: 30, opacity: 0, duration: 0.8
-            });
-        });
-        gsap.utils.toArray('.glass-card').forEach((card, i) => {
-            gsap.from(card, {
-                scrollTrigger: { trigger: card, start: "top 90%" },
-                y: 50, opacity: 0, duration: 0.6, delay: i * 0.1
-            });
-        });
-        gsap.to('.bar-custom', { width: '83%', duration: 1.5, ease: "power2.out", scrollTrigger: '.dataset-bar' });
-        gsap.to('.bar-asap', { width: '17%', duration: 1.5, ease: "power2.out", scrollTrigger: '.dataset-bar' });
     </script>
 </body>
 </html>
